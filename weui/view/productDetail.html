@@ -110,14 +110,17 @@
     }
 
     $(document).ready(function () {
-
-
+        var proId = getUrlParameter("id");
         $(document).on("click", "#buyCheck", function () {
             $.modal({
                 title: "请填写数量",
                 text: ' <div class="weui-count"> <a class="weui-count__btn weui-count__decrease" onclick="decreaseBuyNumber()"></a> <input id="productNum" class="weui-count__number" type="number" value="1"> <a class="weui-count__btn weui-count__increase" onclick="increaseBuyNumber()"></a> </div> ',
                 buttons: [
-                    { text: "确认", onClick: function () { window.document.location = "buyCheck.html"; } },
+                    { text: "确认", onClick: function () {
+                          var proNum=$("#productNum").val();
+                          var checkInfos=proId+":"+proNum;
+                         window.document.location = "buyCheck.html?checkInfos="+checkInfos; 
+                        } },
                     { text: "取消", className: "default" },
                 ]
             });
@@ -125,7 +128,7 @@
 
         $("#bottomTab").find(".weui-tabbar__label").css("color", "black");
         $("#indexTab").find(".weui-tabbar__label").css("color", "#04be02");
-        var proId = getUrlParameter("id");
+        
         var getProdInfoUrl = "/getProductInfo";
         $.ajax({
             url: getProdInfoUrl,
