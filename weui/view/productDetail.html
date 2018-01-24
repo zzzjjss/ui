@@ -18,29 +18,17 @@
     <div class="swiper-container">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
-            <!-- Slides -->
-            <div class="swiper-slide" style="height:300px">
-                <img src="./images/swiper-1.jpg" />
-            </div>
-            <div class="swiper-slide" style="height:300px">
-                <img src="./images/swiper-2.jpg" />
-            </div>
-            <div class="swiper-slide" style="height:300px">
-                <img src="./images/swiper-3.jpg" />
-            </div>
         </div>
         <!-- If we need pagination -->
         <div class="swiper-pagination"></div>
     </div>
-    <div class="page__bd" style="overflow-y:scroll;" id="productList">
+    <div class="page__bd" style="overflow-y:scroll;">
         <div class="weui-panel weui-panel_access">
             <div class="weui-panel__hd">
-                年末写 hhkb键盘
-                <p>
-                    ￥1900
-                </p>
+                <p id="proName"></p>
+                <p id="proPrice"> </p>
             </div>
-            <div class="weui-panel__bd" id="productDescript">
+            <div class="weui-panel__bd" id="proDescript">
 
             </div>
         </div>
@@ -68,34 +56,27 @@
     </div>
 
 
-
-
-
-
-
-
-
     <div class="weui-tabbar" id="bottomTab">
-            <a href="index.html" class="weui-tabbar__item "  id="indexTab">
-              <div class="weui-tabbar__icon">
+        <a href="index.html" class="weui-tabbar__item " id="indexTab">
+            <div class="weui-tabbar__icon">
                 <img src="./images/icon_nav_button.png" alt="">
-              </div>
-              <p class="weui-tabbar__label">首页</p>
-            </a>
-            <a href="buyCart.html" class="weui-tabbar__item" id="buyCartTab">
-              <div class="weui-tabbar__icon">
+            </div>
+            <p class="weui-tabbar__label">首页</p>
+        </a>
+        <a href="buyCart.html" class="weui-tabbar__item" id="buyCartTab">
+            <div class="weui-tabbar__icon">
                 <img src="./images/icon_nav_msg.png" alt="">
                 <span class="weui-badge" style="position: absolute;top: -.4em;right: 3em;" id="buyCartNumber">8</span>
-              </div>
-              <p class="weui-tabbar__label">购物车</p>
-            </a>
-            <a href="my.html" class="weui-tabbar__item" id="myTab">
-              <div class="weui-tabbar__icon">
+            </div>
+            <p class="weui-tabbar__label">购物车</p>
+        </a>
+        <a href="my.html" class="weui-tabbar__item" id="myTab">
+            <div class="weui-tabbar__icon">
                 <img src="./images/icon_nav_cell.png" alt="">
-              </div>
-              <p class="weui-tabbar__label">我</p>
-            </a>
-          </div>
+            </div>
+            <p class="weui-tabbar__label">我</p>
+        </a>
+    </div>
 </body>
 
 </html>
@@ -129,10 +110,7 @@
     }
 
     $(document).ready(function () {
-        $(".swiper-container").swiper({
-            loop: true,
-            autoplay: 3000
-        });
+
 
         $(document).on("click", "#buyCheck", function () {
             $.modal({
@@ -144,9 +122,31 @@
                 ]
             });
         });
-        
-      $("#bottomTab").find(".weui-tabbar__label").css("color","black");
-      $("#indexTab").find(".weui-tabbar__label").css("color","#04be02");
+
+        $("#bottomTab").find(".weui-tabbar__label").css("color", "black");
+        $("#indexTab").find(".weui-tabbar__label").css("color", "#04be02");
+        var proId = getUrlParameter("id");
+        var getProdInfoUrl = "/getProductInfo";
+        $.ajax({
+            url: getProdInfoUrl,
+            type: "GET",
+            data: { "productId": proId },
+            dataType: 'json',
+            success: function (data) {
+                data.productSellInfo.imgUrls.forEach(function (imgUrl) {
+                    var tmp = `<div class="swiper-slide" style="height:300px"> <img src="${imgUrl}" /> </div>`;
+                    $(".swiper-wrapper").append(tmp);
+                    $("#proName").text(data.productSellInfo.name);
+                    $("#proPrice").text("￥ "+data.productSellInfo.sellPrice);
+                    $("#proDescript").text(data.productSellInfo.description);
+                });
+                $(".swiper-container").swiper({
+                    loop: true,
+                    autoplay: 3000
+                });
+            }
+        });
+
 
     });
 
