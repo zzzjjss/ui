@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jQuery WeUI</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description. ">
+
+    <link rel="stylesheet" href="../lib/weui.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.css">
+   <link rel="stylesheet" href="../css/radioCheck.css"> 
+</head>
+
+<body ontouchstart>
+
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_swiped">
+            <div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input type="radio" name="test" id="aaa">
+                        <label for="aaa">左滑列表</label>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cell__ft">
+                <a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" href="javascript:">删除</a>
+                <a class="weui-swiped-btn weui-swiped-btn_default " style="background-color: #1aad19;" href="addressEditor.html">修改</a>
+            </div>
+        </div>
+       
+    </div>
+
+
+
+    <div class="weui-tabbar" style="position: fixed;" id="bottomTab">
+        <div class="weui-tabbar__item">
+            <a href="addressEditor.html" class="weui-btn weui-btn_primary">添加地址</a>
+        </div>
+    </div>
+
+    <script src="../lib/jquery-2.1.4.js"></script>
+    <script src="../lib/fastclick.js"></script>
+    <script src="../js/getParam.js"></script>
+    <script src="../js/jquery-weui.js"></script>
+    <script>
+        $(function () {
+            FastClick.attach(document.body);
+        });
+    </script>
+
+
+</body>
+
+</html>

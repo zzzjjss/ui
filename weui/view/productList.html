@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jQuery WeUI</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description. ">
+
+    <link rel="stylesheet" href="../lib/weui.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.css">
+
+</head>
+
+<body ontouchstart>
+    <div class="weui-search-bar" id="searchBar">
+        <form class="weui-search-bar__form" action="#">
+            <div class="weui-search-bar__box">
+                <i class="weui-icon-search"></i>
+                <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+            </div>
+            <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+                <i class="weui-icon-search"></i>
+                <span>搜索</span>
+            </label>
+        </form>
+        <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+    </div>
+
+
+
+    <div class="page__bd" style="overflow-y:scroll;" id="productList">
+        <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">图文组合列表</div>
+            <div class="weui-panel__bd" id="productItems">
+
+
+                <div class="weui-loadmore" id="loading" style="display:none;border-top-style:solid;border-top-width:1px;width:100%;border-top-color:#C0BFC4;">
+                    <i class="weui-loading"></i>
+                    <span class="weui-loadmore__tips">正在加载</span>
+                </div>
+            </div>
+           
+        </div>
+
+    </div>
+
+
+    <div class="weui-tabbar" id="bottomTab">
+        <a href="index.html" class="weui-tabbar__item " id="indexTab">
+            <div class="weui-tabbar__icon">
+                <img src="./images/icon_nav_button.png" alt="">
+            </div>
+            <p class="weui-tabbar__label">首页</p>
+        </a>
+        <a href="buyCart.html" class="weui-tabbar__item" id="buyCartTab">
+            <div class="weui-tabbar__icon">
+                <img src="./images/icon_nav_msg.png" alt="">
+                <span class="weui-badge" style="position: absolute;top: -.4em;right: 3em;" id="buyCartNumber">8</span>
+            </div>
+            <p class="weui-tabbar__label">购物车</p>
+        </a>
+        <a href="my.html" class="weui-tabbar__item" id="myTab">
+            <div class="weui-tabbar__icon">
+                <img src="./images/icon_nav_cell.png" alt="">
+            </div>
+            <p class="weui-tabbar__label">我</p>
+        </a>
+    </div>
+
+    <script src="../lib/jquery-2.1.4.js"></script>
+    <script src="../lib/fastclick.js"></script>
+    <script src="../js/getParam.js"></script>
+    <script src="../js/jquery-weui.js"></script>
+    <script>
+        $(function () {
+            FastClick.attach(document.body);
+        });
+        var pageIndex = 0, totalPage = -1, pageSize = 20;
+        var loading = false;
+        $(document).ready(function () {
+            var th = $("#searchBar").height();
+            var bh = $("#bottomTab").height();
+            var totalH = $(window).height();
+            $(".page__bd").height(totalH - th - bh);
+            $("#productList").infinite().on("infinite", function () {
+                fetchPrducts();
+            });
+            $("#bottomTab").find(".weui-tabbar__label").css("color", "black");
+            $("#indexTab").find(".weui-tabbar__label").css("color", "#04be02");
+            var brand = getUrlParameter("brand");
+            $("#searchInput").val(brand);
+            fetchPrducts();
+        });
+
+        function fetchPrducts() {
+            if(totalPage>-1&&totalPage<=pageIndex){
+                $("#loading").empty();
+                $("#loading").append('<span class="weui-loadmore__tips">没有更多内容</span>')
+                $("#loading").css("display", "block");
+                return ;
+            }
+            if (loading) return;
+            loading = true;
+            $("#loading").css("display", "block");
+            var keyword = $("#searchInput").val();
+            var requestData = { "pageIndex": pageIndex, "pageSize": pageSize, "keyWord": keyword };
+            var fetchProdUrl = "/listPagedProducts";
+            $.ajax({
+                url: fetchProdUrl,
+                type: "POST",
+                data: JSON.stringify(requestData),
+                contentType: 'application/json;charset=utf-8',
+                success: function (data) {
+                    data.productInfors.forEach(function (prod) {
+                        var tmp = `<a href="productDetail.html?id=${prod.id}" class="weui-media-box weui-media-box_appmsg">
+                                    <div class="weui-media-box__hd">
+                                        <img class="weui-media-box__thumb" src="${prod.snapshotImgUrl}" alt="">
+                                    </div>
+                                    <div class="weui-media-box__bd">
+                                        <h4 class="weui-media-box__title">${prod.name}</h4>
+                                        <p class="weui-media-box__desc">${prod.description}</p>
+                                    </div> </a>`;
+                        $("#productItems").prepend(tmp);
+                    });
+                    loading = false;
+                    $("#loading").css("display", "none");
+                    pageIndex++;
+                    totalPage=data.totalPage;
+                }
+            });
+        }
+
+    </script>
+
+
+</body>
+
+</html>

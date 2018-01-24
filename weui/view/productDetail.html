@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jQuery WeUI</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+
+    <link rel="stylesheet" href="../lib/weui.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.css">
+</head>
+
+<body ontouchstart>
+    <div class="swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide" style="height:300px">
+                <img src="./images/swiper-1.jpg" />
+            </div>
+            <div class="swiper-slide" style="height:300px">
+                <img src="./images/swiper-2.jpg" />
+            </div>
+            <div class="swiper-slide" style="height:300px">
+                <img src="./images/swiper-3.jpg" />
+            </div>
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="page__bd" style="overflow-y:scroll;" id="productList">
+        <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">
+                年末写 hhkb键盘
+                <p>
+                    ￥1900
+                </p>
+            </div>
+            <div class="weui-panel__bd" id="productDescript">
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div style="position:absolute;bottom:50px;width:100%;border-top-style:solid;border-top-width:1px;border-top-color:#C0BFC4;">
+
+        <div class="weui-flex" style="height:45px;">
+            <div class="weui-flex__item">
+            </div>
+            <div class="weui-flex__item" style="background-color:orange;font-size:20px;text-align:center;padding-top:5px;">
+                <a href="#" style="color:white;">
+                    加入购物车
+                </a>
+            </div>
+            <div class="weui-flex__item" style="background-color:red;font-size:20px;text-align:center;padding-top:5px;">
+
+                <a href="javascript:;" style="color:white;" id="buyCheck">
+                    立即购买
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="weui-tabbar" id="bottomTab">
+            <a href="index.html" class="weui-tabbar__item "  id="indexTab">
+              <div class="weui-tabbar__icon">
+                <img src="./images/icon_nav_button.png" alt="">
+              </div>
+              <p class="weui-tabbar__label">首页</p>
+            </a>
+            <a href="buyCart.html" class="weui-tabbar__item" id="buyCartTab">
+              <div class="weui-tabbar__icon">
+                <img src="./images/icon_nav_msg.png" alt="">
+                <span class="weui-badge" style="position: absolute;top: -.4em;right: 3em;" id="buyCartNumber">8</span>
+              </div>
+              <p class="weui-tabbar__label">购物车</p>
+            </a>
+            <a href="my.html" class="weui-tabbar__item" id="myTab">
+              <div class="weui-tabbar__icon">
+                <img src="./images/icon_nav_cell.png" alt="">
+              </div>
+              <p class="weui-tabbar__label">我</p>
+            </a>
+          </div>
+</body>
+
+</html>
+
+
+<script src="../lib/jquery-2.1.4.js"></script>
+<script src="../lib/fastclick.js"></script>
+<script src="../js/getParam.js"></script>
+<script src="../js/jquery-weui.js"></script>
+<script src="../js/swiper.js"></script>
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+    });
+
+
+
+    var MAX = 99, MIN = 1;
+    function decreaseBuyNumber() {
+        var $input = $("#productNum");
+        var number = parseInt($input.val() || "0") - 1
+        if (number < MIN) number = MIN;
+        $input.val(number)
+    }
+
+    function increaseBuyNumber() {
+        var $input = $("#productNum");
+        var number = parseInt($input.val() || "0") + 1
+        if (number > MAX) number = MAX;
+        $input.val(number)
+    }
+
+    $(document).ready(function () {
+        $(".swiper-container").swiper({
+            loop: true,
+            autoplay: 3000
+        });
+
+        $(document).on("click", "#buyCheck", function () {
+            $.modal({
+                title: "请填写数量",
+                text: ' <div class="weui-count"> <a class="weui-count__btn weui-count__decrease" onclick="decreaseBuyNumber()"></a> <input id="productNum" class="weui-count__number" type="number" value="1"> <a class="weui-count__btn weui-count__increase" onclick="increaseBuyNumber()"></a> </div> ',
+                buttons: [
+                    { text: "确认", onClick: function () { window.document.location = "buyCheck.html"; } },
+                    { text: "取消", className: "default" },
+                ]
+            });
+        });
+        
+      $("#bottomTab").find(".weui-tabbar__label").css("color","black");
+      $("#indexTab").find(".weui-tabbar__label").css("color","#04be02");
+
+    });
+
+</script>
